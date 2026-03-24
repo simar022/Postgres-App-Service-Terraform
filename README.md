@@ -58,6 +58,7 @@ The infrastructure is designed with security and scalability as core priorities:
 Run the provided setup script. This creates the Storage Account required to hold your *.tfstate* file and initializes Terraform with a partial backend configuration.
 
 chmod +x setup.sh
+
 ./setup.sh
 
 **Step 2: Configure Variables**
@@ -65,12 +66,15 @@ chmod +x setup.sh
 Create a terraform.tfvars file in the root directory:
 
 project_name = "my-secure-app"
+
 location     = "eastus"
+
 db_password  = "YourSecurePassword123!"
 
 **Step 3: Deploy Infrastructure**
 
 terraform plan
+
 terraform apply -auto-approve
 
 ---
@@ -83,17 +87,17 @@ Once the deployment is complete, Terraform will output the following details:
 
 The URL will be provided in the output final_webapp_url.
 
-    Access: Open the URL in any browser.
+    * **Access**: Open the URL in any browser.
 
-    Note: The app is public, but its connection to the database is handled internally over the Azure backbone.
+    * **Note**: The app is public, but its connection to the database is handled internally over the Azure backbone.
 
 * **2. Private Database**
 
 The database cannot be accessed from your local machine (unless you use a VPN or Bastion).
 
-    Internal FQDN: [project-name]-db-private.[project-name].postgres.database.azure.com
+    * **Internal FQDN**: [project-name]-db-private.[project-name].postgres.database.azure.com
 
-    Verification: To test connectivity, use the SSH tool in the Azure Portal for your Web App and run:
+    * **Verification**: To test connectivity, use the SSH tool in the Azure Portal for your Web App and run:
     
     curl -v telnet://[DB_FQDN]:5432
 
