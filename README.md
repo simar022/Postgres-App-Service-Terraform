@@ -10,8 +10,8 @@ The infrastructure is designed with security and scalability as core priorities:
 
 * **Network Isolation**
     * **Virtual Network (VNet)**: Contains two dedicated subnets for tier separation.
-    * *App Subnet*: Configured with `Microsoft.Web/serverFarms` delegation for regional VNet integration.
-    * *DB Subnet*: Configured with `Microsoft.DBforPostgreSQL/flexibleServers` delegation for private injection.
+    * **App Subnet**: Configured with `Microsoft.Web/serverFarms` delegation for regional VNet integration.
+    * **DB Subnet**: Configured with `Microsoft.DBforPostgreSQL/flexibleServers` delegation for private injection.
 * **Database Security**
     * The PostgreSQL Flexible Server has `public_network_access_enabled = false`.
     * It is reachable **only** via its private IP within the internal network.
@@ -39,7 +39,7 @@ The infrastructure is designed with security and scalability as core priorities:
 ├── outputs.tf            # Web App URL and DB FQDN access points
 └── setup.sh              # Automation script for backend initialization
 
-text```
+```
 
 ---
 
@@ -55,7 +55,7 @@ text```
 
 **Step 1: Initialize Remote State**
 
-Run the provided setup script. This creates the Storage Account required to hold your `.tfstate` file and initializes Terraform with a partial backend configuration.
+Run the provided setup script. This creates the Storage Account required to hold your *.tfstate* file and initializes Terraform with a partial backend configuration.
 
 chmod +x setup.sh
 ./setup.sh
