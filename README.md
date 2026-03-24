@@ -1,27 +1,32 @@
-Azure Automated Web-App & PostgreSQL Infrastructure
+# 🌐 Azure Automated Web-App & PostgreSQL Infrastructure
 
-This repository contains a modularized Terraform configuration designed to deploy a secure, high-availability web application environment on Microsoft Azure. It leverages VNet Integration and Private DNS to ensure the database remains entirely isolated from the public internet while remaining accessible to the App Service.
+This repository contains a modularized **Terraform** configuration to deploy a secure, high-availability web application environment on **Microsoft Azure**. It leverages **VNet Integration** and **Private DNS** to ensure the database remains entirely isolated from the public internet while remaining accessible to the App Service.
 
-📝 Architecture Overview
+---
 
-The infrastructure is built with security and scalability as core priorities:
+## 🏗️ Architecture Overview
 
-Network Isolation:
+The infrastructure is designed with security and scalability as core priorities:
 
-	A Virtual Network (VNet) containing two dedicated subnets.
+* **Network Isolation**
+    * **Virtual Network (VNet)**: Contains two dedicated subnets for tier separation.
+    * *App Subnet*: Configured with `Microsoft.Web/serverFarms` delegation for regional VNet integration.
+    * *DB Subnet*: Configured with `Microsoft.DBforPostgreSQL/flexibleServers` delegation for private injection.
+* **Database Security**
+    * The PostgreSQL Flexible Server has `public_network_access_enabled = false`.
+    * It is reachable **only** via its private IP within the internal network.
+* **Service Connectivity**
+    * The App Service uses **VNet Integration** to route outbound traffic into the VNet.
+    * Resolves the database's FQDN via a **Private DNS Zone**.
+* **State Management**
+    * Terraform state is stored remotely in an **Azure Blob Storage** container.
+    * **State Locking** is enabled via Blob Lease to prevent concurrent execution conflicts.
 
-        App Subnet: Configured with Microsoft.Web/serverFarms delegation for regional VNet integration.
+---
 
-        DB Subnet: Configured with Microsoft.DBforPostgreSQL/flexibleServers delegation for private injection.
+## 📂 Project Structure
 
-Database Security: The PostgreSQL Flexible Server has public_network_access_enabled = false. It is reachable only via its private IP within the internal network.
-
-Service Connectivity: The App Service uses VNet Integration to route outbound traffic into the VNet, resolving the database's Fully Qualified Domain Name (FQDN) via a Private DNS Zone.
-
-State Management: Terraform state is stored remotely in an Azure Blob Storage container with state locking enabled to prevent concurrent execution conflicts.
-
-📂 Project Structure
-
+```text
 .
 ├── bootstrap/            # One-time setup for remote state storage resources
 ├── modules/
@@ -34,69 +39,68 @@ State Management: Terraform state is stored remotely in an Azure Blob Storage co
 ├── outputs.tf            # Web App URL and DB FQDN access points
 └── setup.sh              # Automation script for backend initialization
 
-🚀 Deployment Steps
+---
 
-Prerequisites
+## 🚀 Deployment Steps
 
-    Azure CLI installed and authenticated (az login).
+**Prerequisites**
 
-    Terraform CLI (v1.5.0+) installed.
+1.  Azure CLI installed and authenticated (az login).
 
-    Owner or Contributor permissions on your Azure Subscription.
+2.  Terraform CLI (v1.5.0+) installed.
 
-Step 1: Initialize Remote State
+3.  Appropriate permissions on your Azure Subscription.
 
-Run the provided setup script. This creates the Storage Account required to hold your .tfstate file and initializes Terraform with a partial backend configuration.
+**Step 1: Initialize Remote State**
 
-    chmod +x setup.sh
+Run the provided setup script. This creates the Storage Account required to hold your `.tfstate` file and initializes Terraform with a partial backend configuration.
 
-    ./setup.sh
+chmod +x setup.sh
+./setup.sh
 
-Step 2: Configure Variables
+**Step 2: Configure Variables**
 
-Create a terraform.tfvars file in the root directory to define your environment settings:
-
-Terraform
+Create a terraform.tfvars file in the root directory:
 
 project_name = "my-secure-app"
 location     = "eastus"
 db_password  = "YourSecurePassword123!"
 
-Step 3: Deploy Infrastructure
+**Step 3: Deploy Infrastructure**
 
-Execute the following commands to build your environment:
+terraform plan
+terraform apply -auto-approve
 
-    terraform plan
+---
 
-    terraform apply -auto-approve
+## 🔑 Accessing the Services
 
-🔑 Accessing the Services
+Once the deployment is complete, Terraform will output the following details:
 
-Once the deployment is complete, Terraform will display the output details:
-1. Web Application
+* **1. Web Application**
 
-The URL is provided in the output final_webapp_url.
+The URL will be provided in the output final_webapp_url.
 
-    Access: Open the URL in any web browser.
+    Access: Open the URL in any browser.
 
-    Note: While the app endpoint is public, its communication with the database is encrypted and handled internally over the Azure backbone.
+    Note: The app is public, but its connection to the database is handled internally over the Azure backbone.
 
-2. Private Database
+* **2. Private Database**
 
-The database cannot be accessed from your local machine (unless using a VPN or Azure Bastion).
+The database cannot be accessed from your local machine (unless you use a VPN or Bastion).
 
     Internal FQDN: [project-name]-db-private.[project-name].postgres.database.azure.com
 
     Verification: To test connectivity, use the SSH tool in the Azure Portal for your Web App and run:
+    
+    curl -v telnet://[DB_FQDN]:5432
 
-        curl -v telnet://[DB_FQDN]:5432
+---
+   
+## 🛠 Maintenance & Clean up
 
-🛠 Maintenance & Clean Up
+To update the infrastructure (e.g., changing the App Service SKU), modify the variables and run terraform apply.
 
-    To Update: Modify your variable files or module logic and run terraform apply.
+To destroy all resources and avoid ongoing Azure costs:
 
-    To Destroy: To stop incurring costs and remove all resources:
-
-        terraform destroy
-
-    Note: The tfstate-rg and the Storage Account containing the state files will not be deleted by the destroy command. They must be removed manually if no longer required.
+terraform destroy
