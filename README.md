@@ -39,6 +39,8 @@ The infrastructure is designed with security and scalability as core priorities:
 ├── outputs.tf            # Web App URL and DB FQDN access points
 └── setup.sh              # Automation script for backend initialization
 
+text```
+
 ---
 
 ## 🚀 Deployment Steps
