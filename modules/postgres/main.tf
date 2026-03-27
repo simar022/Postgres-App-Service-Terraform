@@ -1,5 +1,5 @@
 resource "azurerm_postgresql_flexible_server" "db" {
-  name                   = "${var.project_name}-db-private"
+  name                   = var.server_name
   resource_group_name    = var.resource_group_name
   location               = var.location
   version                = "17"
@@ -8,7 +8,7 @@ resource "azurerm_postgresql_flexible_server" "db" {
   private_dns_zone_id    = var.dns_zone_id
   delegated_subnet_id    = var.subnet_id
   public_network_access_enabled = false
-  sku_name   = "B_Standard_B1ms"
+  sku_name   = var.sku_name
   storage_mb = 32768
   backup_retention_days        = 7
   geo_redundant_backup_enabled = false

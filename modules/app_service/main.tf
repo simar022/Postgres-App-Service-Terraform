@@ -17,7 +17,7 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     vnet_route_all_enabled = true 
     application_stack {
-      node_version = "24-lts"
+      node_version = var.node_version
     }
   }
 
@@ -38,10 +38,12 @@ resource "azurerm_linux_web_app_slot" "staging" {
     vnet_route_all_enabled = true
     app_command_line = "npm start"
     application_stack {
-      node_version = "24-lts"
+      node_version = var.node_version
     }
   }
-  app_settings = azurerm_linux_web_app.app.app_settings
+  app_settings = merge(azurerm_linux_web_app.app.app_settings, {
+    "NODE_ENV" = var.environment == "prod" ? "staging" : "development"
+  })
 }
 
 resource "azurerm_linux_web_app_slot" "dev" {
@@ -55,8 +57,10 @@ resource "azurerm_linux_web_app_slot" "dev" {
     vnet_route_all_enabled = true
     app_command_line = "npm start"
     application_stack {
-      node_version = "24-lts"
+      node_version = var.node_version
     }
   }
-  app_settings = azurerm_linux_web_app.app.app_settings
+  app_settings = merge(azurerm_linux_web_app.app.app_settings, {
+    "NODE_ENV" = var.environment == "prod" ? "staging" : "development"
+  })
 }
