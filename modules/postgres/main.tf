@@ -2,7 +2,7 @@ resource "azurerm_postgresql_flexible_server" "db" {
   name                   = "${var.project_name}-db-private"
   resource_group_name    = var.resource_group_name
   location               = var.location
-  version                = "14"
+  version                = "17"
   administrator_login    = var.db_user
   administrator_password = var.db_password
   private_dns_zone_id    = var.dns_zone_id

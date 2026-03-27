@@ -28,4 +28,5 @@ module "app_service" {
   resource_group_name = azurerm_resource_group.main.name
   app_subnet_id       = module.network.app_subnet_id
   db_url              = "postgresql://psqladmin:${var.db_password}@${module.database.db_fqdn}:5432/postgres"
+  environment         = var.environment
 }

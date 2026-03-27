@@ -1,0 +1,16 @@
+{
+  "name": "azure-node24-pg17-test",
+  "version": "1.0.0",
+  "description": "DevOps Test App for Private VNet Connectivity",
+  "main": "app.js",
+  "scripts": {
+    "prestart": "echo '--- ENVIRONMENT DIAGNOSTICS ---' && node -e 'console.log(\"NODE_VERSION:\", process.version); console.log(\"DB_URL_PRESENT:\", !!process.env.DATABASE_URL); console.log(\"PORT:\", process.env.PORT);'",
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.11.0"
+  }
+}

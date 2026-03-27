@@ -20,6 +20,7 @@ rm -rf .terraform/
 rm -f .terraform.lock.hcl
 rm -f terraform.tfstate*
 rm -f *.tfplan
+rm -f terraform.tfvars.json
 
 echo "Step 3: Deleting the Terraform State Resource Group ($TF_STATE_RG)..."
 az group delete --name $TF_STATE_RG --yes --no-wait
