@@ -28,16 +28,17 @@ The infrastructure is designed with security and scalability as core priorities:
 
 ```text
 .
-├── modules/
-│   ├── network/          # VNet, Subnets, and Private DNS logic
-│   ├── postgres/         # Private PostgreSQL Flexible Server logic
-│   └── app_service/      # Linux Web App & App Service Plan logic
-├── main.tf               # Root module orchestrating the module calls
-├── providers.tf          # AzureRM and Random provider configurations
-├── variables.tf          # Global input definitions
-├── outputs.tf            # Web App URL and DB FQDN access points
-├── setup.sh              # Automation script for backend initialization
-└── cleanup.sh            # Automation script for cleanup of resources
+├── scripts/             # Automation for environment lifecycle
+│   ├── setup.sh         # Initial environment & provider configuration
+│   ├── staging.sh       # Logic for deploying/testing staging slots
+│   └── cleanup.sh       # Resource destruction and state clearing
+├── terraform/           # Infrastructure as Code (IaC)
+│   ├── main.tf          # Root module orchestration
+│   ├── modules/         # Reusable infra components (Network, DB, App)
+│   └── providers.tf     # AzureRM provider & backend settings
+└── webapp/              # Node.js Application Source
+    ├── app.js           # Express/Node server with 'pg' pool logic
+    └── package.json     # Dependency management (PostgreSQL drivers)
 ```
 
 ---
@@ -56,21 +57,15 @@ The infrastructure is designed with security and scalability as core priorities:
 
 Run the provided setup script. This creates the Storage Account required to hold your *.tfstate* file and initializes Terraform with a partial backend configuration.
 
-*chmod +x setup.sh*
+*cd scripts*
+
+*chmod +x '*.sh'*
 
 *./setup.sh*
 
-**Step 2: Configure Variables**
+**Step 2: Deploy Infrastructure**
 
-Create a *terraform.tfvars* file in the root directory:
-
-**project_name = "your-project-name"**
-
-**location     = "eastus"**
-
-**db_password  = "YourSecurePassword123!"**
-
-**Step 3: Deploy Infrastructure**
+*cd terraform*
 
 *terraform plan*
 
@@ -93,7 +88,7 @@ The URL will be provided in the output final_webapp_url.
 
 The database cannot be accessed from your local machine (unless you use a VPN or Bastion).
 
-* **Internal FQDN**: [project-name]-db-private.[project-name].postgres.database.azure.com
+* **Internal FQDN**: [project-name]-db.postgres.database.azure.com
 * **Verification**: To test connectivity, use the SSH tool in the Azure Portal for your Web App and run:
 
 *curl -v telnet://[DB_FQDN]:5432*
@@ -105,7 +100,5 @@ The database cannot be accessed from your local machine (unless you use a VPN or
 To update the infrastructure (e.g., changing the App Service SKU), modify the variables and run terraform apply.
 
 To destroy all resources and avoid ongoing Azure costs:
-
-*terraform destroy*
 
 *./cleanup.sh*
