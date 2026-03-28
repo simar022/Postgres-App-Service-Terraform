@@ -4,7 +4,7 @@ APP_NAME="lightspec-webapp"
 RG_NAME="lightspec-rg"
 
 echo "Step 1: Installing dependencies locally for Node 24..."
-cd webapp
+cd ../webapp
 npm install --production 
 
 echo "Step 2: Zipping application code INCLUDING node_modules..."
@@ -18,6 +18,7 @@ az webapp deployment source config-zip \
     --src ../deploy.zip
 
 echo "Step 4: Cleaning up..."
+cd ../
 rm ../deploy.zip
 
 echo "✅ Deployment to Staging Complete!"

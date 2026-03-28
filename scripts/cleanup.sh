@@ -12,6 +12,8 @@ if [[ $confirm != "y" ]]; then
     exit 1
 fi
 
+cd ../terraform
+
 echo "Step 1: Destroying Terraform Managed Infrastructure..."
 terraform destroy -auto-approve
 

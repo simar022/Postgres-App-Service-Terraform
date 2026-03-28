@@ -22,6 +22,8 @@ echo "STORAGE_ACCOUNT_NAME: $STORAGE_ACCOUNT_NAME"
 echo "--------------------------------------------------------"
 echo "Step 4: Initializing Terraform with Backend Configuration..."
 
+cd ../terraform
+
 terraform init \
     -backend-config="resource_group_name=$RESOURCE_GROUP_NAME" \
     -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
