@@ -59,8 +59,6 @@ Run the provided setup script. This creates the Storage Account required to hold
 
 *cd scripts*
 
-*chmod +x '*.sh'*
-
 *./setup.sh*
 
 **Step 2: Deploy Infrastructure**
