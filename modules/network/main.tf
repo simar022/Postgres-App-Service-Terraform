@@ -33,6 +33,8 @@ resource "azurerm_subnet" "db" {
       actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
+  
+  lifecycle { ignore_changes = [delegation] }
 }
 
 resource "azurerm_private_dns_zone" "db_zone" {
@@ -42,7 +44,7 @@ resource "azurerm_private_dns_zone" "db_zone" {
 
 resource "azurerm_private_dns_zone_virtual_network_link" "link" {
   name                  = "db-vnet-link"
-  private_dns_zone_name = azurerm_private_dns_zone.db_zone.name
   resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.db_zone.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }

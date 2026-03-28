@@ -7,3 +7,5 @@ variable "subnet_id" {}
 variable "dns_zone_id" {}
 variable "server_name" {}
 variable "sku_name" {}
+variable "db_version" { default = "17" }
+variable "storage_mb" { default = "32768" }

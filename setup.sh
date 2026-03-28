@@ -6,7 +6,7 @@ CONTAINER_NAME="terraform-state"
 LOCATION="centralindia"
 PROJECT_NAME="lightspec"
 ENVIRONMENT="prod"
-PASSWORD="123456"
+PASSWORD="LightSpecAdmin2026"
 
 echo "Step 1: Creating Resource Group for Terraform State..."
 az group create --name $RESOURCE_GROUP_NAME --location $LOCATION
@@ -15,7 +15,7 @@ echo "Step 2: Creating Storage Account..."
 az storage account create --name $STORAGE_ACCOUNT_NAME --resource-group $RESOURCE_GROUP_NAME --location $LOCATION --sku Standard_LRS --encryption-services blob --min-tls-version TLS1_2 --allow-blob-public-access false
 
 echo "Step 3: Creating Blob Container..."
-az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
+az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME --auth-mode login
 
 echo "--------------------------------------------------------"
 echo "STORAGE_ACCOUNT_NAME: $STORAGE_ACCOUNT_NAME"
