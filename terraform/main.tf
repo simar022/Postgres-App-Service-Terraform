@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "rg" {
 }
 
 locals {
-  app_sku      = var.environment == "prod" ? "S1" : "B1"
-  db_sku       = var.environment == "prod" ? "B_Standard_B1ms" : "GP_Standard_D2ds_v4"
+  app_sku      = var.environment == "dev" ? "S1" : "B1"
+  db_sku       = var.environment == "dev" ? "B_Standard_B1ms" : "GP_Standard_D2ds_v4"
   node_version = "24-lts"
   resource_group_name = "${var.project_name}-rg"
 }

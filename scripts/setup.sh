@@ -5,7 +5,7 @@ STORAGE_ACCOUNT_NAME="tfstatelightspec0101"
 CONTAINER_NAME="terraform-state"
 LOCATION="centralindia"
 PROJECT_NAME="lightspec"
-ENVIRONMENT="prod"
+ENVIRONMENT="dev"
 PASSWORD="LightSpecAdmin2026"
 
 echo "Step 1: Creating Resource Group for Terraform State..."

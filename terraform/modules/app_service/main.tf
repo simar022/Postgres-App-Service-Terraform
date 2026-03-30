@@ -3,7 +3,7 @@ resource "azurerm_service_plan" "plan" {
   resource_group_name = var.resource_group_name
   location            = var.location
   os_type             = var.os_type
-  sku_name = var.environment == "prod" ? "S1" : "B1" 
+  sku_name = var.environment == "dev" ? "S1" : "B1" 
 }
 
 resource "azurerm_linux_web_app" "app" {
@@ -44,7 +44,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "vnet_config" {
 }
 
 resource "azurerm_linux_web_app_slot" "staging" {
-  count          = var.environment == "prod" ? 1 : 0
+  count          = var.environment == "dev" ? 1 : 0
   name           = "staging"
   app_service_id = azurerm_linux_web_app.app.id
   virtual_network_subnet_id = var.app_subnet_id
@@ -59,12 +59,12 @@ resource "azurerm_linux_web_app_slot" "staging" {
     }
   }
   app_settings = merge(azurerm_linux_web_app.app.app_settings, {
-    "NODE_ENV" = var.environment == "prod" ? "staging" : "development"
+    "NODE_ENV" = var.environment == "dev" ? "staging" : "development"
   })
 }
 
 resource "azurerm_linux_web_app_slot" "dev" {
-  count          = var.environment == "prod" ? 1 : 0
+  count          = var.environment == "dev" ? 1 : 0
   name           = "dev"
   app_service_id = azurerm_linux_web_app.app.id
   virtual_network_subnet_id = var.app_subnet_id
@@ -79,6 +79,6 @@ resource "azurerm_linux_web_app_slot" "dev" {
     }
   }
   app_settings = merge(azurerm_linux_web_app.app.app_settings, {
-    "NODE_ENV" = var.environment == "prod" ? "staging" : "development"
+    "NODE_ENV" = var.environment == "dev" ? "staging" : "development"
   })
 }
